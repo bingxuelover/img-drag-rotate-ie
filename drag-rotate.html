@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <title>图片选装、拖拽支持ie</title>
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+            }
+            .box_div {
+                padding: 10px 20px;
+                background: #f4f5f6;
+            }
+            /*拖动页面*/
+            .dragdiv {
+                float: left;
+                display: inline;
+                width: 620px;
+                height: 310px;
+                overflow: hidden;
+                margin-right: 10px;
+                border: 3px solid #cbcbcb;
+                border-radius: 5px;
+                position: relative;
+                background: #fff;
+            }
+            .draglistdiv {
+                margin-left: 630px;
+            }
+            .draglistdivl {
+                margin: 10px 30px;
+            }
+            .draglistdivl > div {
+                padding-top: 10px;
+            }
+            .draglistdivl > .media_div {
+                padding-top: 15px;
+            }
+            .dragme {
+                position: relative;
+                cursor: move;
+                -ms-transform-origin: 50% 50%;
+                -webkit-transform-origin: 50% 50%;
+                transform-origin: 50% 50%;
+            }
+            .draglist {
+                padding: 5px;
+                border: 1px solid #ccc;
+                background: #fff;
+                height: 340px;
+                overflow-y: auto;
+            }
+            .draglist li {
+                display: inline-block;
+                *display: inline;
+                *zoom: 1;
+                width: 150px;
+                height: 120px;
+                margin-right: 5px;
+                border: 1px solid #ddd;
+                cursor: pointer;
+                background: #aaa;
+            }
+            .draglist li.active {
+                border: 1px solid #ffc000;
+                cursor: default;
+            }
+            .draglist img {
+                width: 150px;
+                height: 120px;
+            }
+            #controls {
+                position: absolute;
+                bottom: 0;
+                right: 0;
+                background: #fff;
+                padding: 5px;
+            }
+            .phototool {
+                margin: 0 5px;
+                display: inline-block;
+                width: 25px;
+                height: 25px;
+                text-indent: -999999px;
+                background: url("images/photoTool.png") no-repeat;
+            }
+            #rotate_left {
+                background-position: -74px -24px;
+            }
+            #zoom_out {
+                background-position: -20px -24px;
+            }
+            #rotate_fit {
+                background-position: -49px -24px;
+            }
+            #zoom_in {
+                background-position: 0 -24px;
+            }
+            #rotate_right {
+                background-position: -98px -24px;
+            }
+            #rotate_left:hover {
+                background-position: -74px 1px;
+            }
+            #zoom_out:hover {
+                background-position: -20px 1px;
+            }
+            #rotate_fit:hover {
+                background-position: -49px 1px;
+            }
+            #zoom_in:hover {
+                background-position: 0 1px;
+            }
+            #rotate_right:hover {
+                background-position: -98px 1px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="page_divpop page_divw box_div">
+            <div class="clear">
+                <div class="dragdiv">
+                    <img src="images/img1.jpg" class="dragme" name="dragme" id="dragme"/>
+                    <div id='controls'>
+                        <a class="phototool" id='rotate_left' title='左转'>
+                            &lt;
+                        </a>
+                        <a class="phototool" id='rotate_fit' title='原图'>
+                            [ ]
+                        </a>
+                        <a class="phototool" id='rotate_right' title='右转'>
+                            &gt;
+                        </a>
+                    </div>
+                </div>
+                <div class="draglist">
+                    <ul id="draglist">
+                        <!--图片列表位置-->
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <script src="js/jquery-1.9.0.min.js"></script>
+        <!--js.dragimg.js要放在页面底部-->
+        <script src="js/js.dragimg.js"></script>
+        <script>
+            $(function () {
+                //切换显示的图片;
+                (function () {
+                    //加载图片
+                    var imglist = ['images/img1.jpg', 'images/img2.jpg', 'images/img3.jpg', 'images/img4.jpg'];
+                    $('#dragme').attr('src', imglist[0]);
+                    var imghtml = '';
+                    for (var i in imglist) {
+                        imghtml += '<li><img src="' + imglist[i] + '" /></li>'
+                    }
+                    $('#draglist').append(imghtml);
+                    $('#draglist li:first-child').addClass('active');
+                    //切换显示
+                    $('#draglist').on('click', 'li', function () {
+                        if ($(this).hasClass('active')) {
+                            return false;
+                        } else {
+                            $('#dragme').attr('src', $(this).children('img').eq(0).attr('src')).css({'left': 0, 'top': 0});
+                            $.rotateEvent($.extend({}, {type: 'rotateFit'}));
+                            $(this).addClass('active').siblings('li').removeClass('active');
+                            return false;
+                        }
+                    })
+                })();
+            })
+        </script>
+    </body>
+</html>
